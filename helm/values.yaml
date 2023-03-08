@@ -1,0 +1,69 @@
+global:
+  cloudProvider: {}
+  tracing: {}
+  metrics: {}
+  environment: {}
+
+enabled: true
+environment: development
+replicaCount: 1
+initialDelaySeconds: 60
+nodePort: 30030 #for minikube deployment only
+resetOnConfigChange: true
+
+cloudProvider:
+  dockerRegistryUrl: acrarolibotnonprod.azurecr.io
+  imagePullSecretName: 'my-registry-secret'
+  flavor: openshift
+
+caSecretName: ''
+caPath: '/usr/local/share/ca-certificates'
+caKey: 'ca.crt'
+
+image:
+  repository: qgis-server
+  tag: v0.0.1
+
+env:
+  port: 8080
+  targetPort: 8080
+  protocol: TCP
+  logLevel: info
+  logPrettyPrintEnabled: false
+  responseCompressionEnabled: true
+  requestPayloadLimit: 1mb
+  tracing:
+    enabled: false
+    url: http://localhost:55681/v1/trace
+  metrics:
+    enabled: false
+    url: http://localhost:55681/v1/metrics
+  SKIP_NGINX: 0
+  QGIS_SERVER_LOG_FILE: /var/tmp/qgisserver.log
+  QGIS_SERVER_LOG_LEVEL: 0
+
+resources:
+  enabled: true
+  value:
+    limits:
+      cpu: 250m
+      memory: 64Mi
+    requests:
+      cpu: 250m
+      memory: 64Mi
+
+route:
+  enabled: true
+  path: /
+  tls: true
+  timeout:
+    enabled: false # defaults to 30s by openshift
+    duration: 60s # supported units (us, ms, s, m, h, d)
+
+ingress:
+  enabled: false
+  path: /
+  host: 'localhost'
+  cors:
+    enabled: true
+    origin: '*'
