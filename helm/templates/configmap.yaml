@@ -22,7 +22,11 @@ data:
   {{ if .Values.caSecretName }}
   NODE_EXTRA_CA_CERTS: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
   {{ end }}
-  SKIP_NGINX: {{ quote .Values.env.SKIP_NGINX }}
-  QGIS_SERVER_LOG_FILE: {{ quote .Values.env.QGIS_SERVER_LOG_FILE }}
-  QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.QGIS_SERVER_LOG_LEVEL }}
+  AWS_ACCESS_KEY_ID: {{ quote .Values.s3.accessKeyId }}
+  AWS_SECRET_ACCESS_KEY: {{ quote .Values.s3.secretAccessKey }}
+  AWS_ENDPOINT_URL: {{ quote .Values.s3.endpointUrl }}
+  AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
+  QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}
+  QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.qgisServerLogLevel }}
+  RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}
 {{- end }}

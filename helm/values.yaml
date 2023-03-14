@@ -5,7 +5,7 @@ global:
   environment: {}
 
 enabled: true
-environment: development
+environment: integration
 replicaCount: 1
 initialDelaySeconds: 60
 nodePort: 30030 #for minikube deployment only
@@ -13,20 +13,31 @@ resetOnConfigChange: true
 
 cloudProvider:
   dockerRegistryUrl: acrarolibotnonprod.azurecr.io
-  imagePullSecretName: 'my-registry-secret'
+  imagePullSecretName: 'acr-registry'
   flavor: openshift
 
 caSecretName: ''
 caPath: '/usr/local/share/ca-certificates'
 caKey: 'ca.crt'
 
+fs:
+  sourcePvc:
+    enabled: true
+    name: dem-pvc-int
+
+s3:
+  accessKeyId: raster
+  secretAccessKey: rasterPassword
+  endpointUrl: http://10.8.0.9:9000
+  bucketName: dem-int
+
 image:
   repository: qgis-server
-  tag: v0.0.1
+  tag: v1.0.0
 
 env:
   port: 8080
-  targetPort: 8080
+  targetPort: 80
   protocol: TCP
   logLevel: info
   logPrettyPrintEnabled: false
@@ -38,9 +49,9 @@ env:
   metrics:
     enabled: false
     url: http://localhost:55681/v1/metrics
-  SKIP_NGINX: 0
-  QGIS_SERVER_LOG_FILE: /var/tmp/qgisserver.log
-  QGIS_SERVER_LOG_LEVEL: 0
+  qgisServerLogFile: /var/tmp/qgisserver.log
+  qgisServerLogLevel: 1
+  rawDataProxyUrl: http://client-int-dem-integration-nginx-s3-gateway:8080
 
 resources:
   enabled: true
@@ -62,6 +73,7 @@ route:
 
 ingress:
   enabled: false
+  type: 'nginx-kubernetes' # supported values: 'nginx-org' | 'nginx-kubernetes'
   path: /
   host: 'localhost'
   cors:
