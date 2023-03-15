@@ -33,11 +33,11 @@ s3:
 
 image:
   repository: qgis-server
-  tag: v1.0.0
+  tag: v1.0.5
 
 env:
-  port: 8080
-  targetPort: 80
+  port: 80
+  targetPort: 8080
   protocol: TCP
   logLevel: info
   logPrettyPrintEnabled: false
@@ -51,17 +51,17 @@ env:
     url: http://localhost:55681/v1/metrics
   qgisServerLogFile: /var/tmp/qgisserver.log
   qgisServerLogLevel: 1
-  rawDataProxyUrl: http://client-int-dem-integration-nginx-s3-gateway:8080
+  rawDataProxyUrl: http://client-int-qgis-integration-nginx-s3-gateway:8080
 
 resources:
   enabled: true
   value:
     limits:
-      cpu: 250m
-      memory: 64Mi
+      cpu: 200m
+      memory: 4Gi
     requests:
-      cpu: 250m
-      memory: 64Mi
+      cpu: 50m
+      memory: 4Gi
 
 route:
   enabled: true
