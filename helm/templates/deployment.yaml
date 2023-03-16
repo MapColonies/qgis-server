@@ -44,6 +44,7 @@ spec:
           {{- with .Values.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
           {{- end }}
+          # For debugging
           # command:
           #   - sleep
           #   - infinity
@@ -54,12 +55,15 @@ spec:
               subPath: {{ quote .Values.caKey }}
             {{- end }}
             {{- if .Values.fs.sourcePvc.enabled  }}
-            - name: data
-              mountPath: /io
-            # - name: fonts
-            #   mountPath: /usr/share/fonts
-            # - name: plugins
-            #   mountPath: /io/plugins
+            - name: qgis-storage
+              mountPath: /io/data
+              subPath: data
+            - name: qgis-storage
+              mountPath: /io/plugins
+              subPath: plugins
+            - name: qgis-storage
+              mountPath: /usr/share/fonts
+              subPath: fonts
             {{- end }}
           env:
             - name: SERVER_PORT
@@ -87,17 +91,12 @@ spec:
             secretName: {{ .Values.caSecretName }}
         {{- end }}
         {{- if .Values.fs.sourcePvc.enabled }}
-        - name: data
-          emptyDir: 
-            sizeLimit: 500Mi
-            medium: 'Memory'
-          # persistentVolumeClaim:
-          #   claimName: {{ quote .Values.fs.sourcePvc.name }}
-        # - name: fonts
-        #   persistentVolumeClaim:
-        #     claimName: {{ quote .Values.fs.sourcePvc.name }}
-        # - name: plugins
-        #   persistentVolumeClaim:
-        #     claimName: {{ quote .Values.fs.sourcePvc.name }}
+        - name: qgis-storage
+          # Empty in-memory volume for testing
+          # emptyDir: 
+          #   sizeLimit: 500Mi
+          #   medium: 'Memory'
+          persistentVolumeClaim:
+            claimName: {{ quote .Values.fs.sourcePvc.name }}
         {{- end }}
 {{- end -}}
