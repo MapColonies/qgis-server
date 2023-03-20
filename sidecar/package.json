@@ -1,0 +1,38 @@
+{
+  "name": "qgis-server-sidecar",
+  "version": "1.0.0",
+  "description": "Sync QGIS Server data dir",
+  "main": "script.mjs",
+  "engines": {
+    "node": ">=14.8.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "start": "node ./src/index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MapColonies/shared-images.git"
+  },
+  "keywords": [
+    "qgis-server",
+    "zx",
+    "openshift"
+  ],
+  "author": "ellamartirosyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MapColonies/shared-images/issues"
+  },
+  "homepage": "https://github.com/MapColonies/shared-images#readme",
+  "dependencies": {
+    "@map-colonies/js-logger": "0.0.5",
+    "zx": "^7.2.1"
+  },
+  "devDependencies": {
+    "@map-colonies/prettier-config": "0.0.1",
+    "prettier": "^2.8.5"
+  }
+}
