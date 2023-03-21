@@ -31,6 +31,19 @@ s3:
   endpointUrl: http://10.8.0.9:9000
   bucketName: dem-int
 
+sidecar:
+  repository: sidecar
+  tag: v0.0.1
+  resources:
+    enabled: true
+    value:
+      limits:
+        cpu: 200m
+        memory: 1Gi
+      requests:
+        cpu: 50m
+        memory: 1Gi
+
 image:
   repository: qgis-server
   tag: v0.0.2
