@@ -20,3 +20,6 @@ docker container run --rm --name sidecar \
       -v /docker/qgis/data:/io/data \
       sidecar:v1.0.0 -d
 ```
+```
+AWS_ENDPOINT_URL=http://10.8.0.9:9000 AWS_BUCKET_NAME=dem-int RAW_DATA_PROXY_URL=https://client-int-qgis-integration-nginx-s3-gateway-route-integration.apps.j1lk3njp.eastus.aroapp.io IS_INIT_MODE=false npx zx script.mjs
+```
