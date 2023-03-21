@@ -7,6 +7,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-{{ $chartName }}-configmap
 data:
+  INITIAL_DELAY_SECONDS: {{ .Values.initialDelaySeconds | quote }}
   REQUEST_PAYLOAD_LIMIT: {{ .Values.env.requestPayloadLimit | quote }}
   RESPONSE_COMPRESSION_ENABLED: {{ .Values.env.responseCompressionEnabled | quote }}
   LOG_LEVEL: {{ .Values.env.logLevel | quote }}
@@ -29,4 +30,5 @@ data:
   QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}
   QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.qgisServerLogLevel }}
   RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}
+  POLLING_INTERVAL: {{ quote .Values.env.pollingInterval }}
 {{- end }}

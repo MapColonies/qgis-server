@@ -52,6 +52,7 @@ env:
   qgisServerLogFile: /var/tmp/qgisserver.log
   qgisServerLogLevel: 1
   rawDataProxyUrl: http://client-int-qgis-integration-nginx-s3-gateway:8080
+  pollingInterval: 120000
 
 resources:
   enabled: true

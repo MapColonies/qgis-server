@@ -1,5 +1,5 @@
 {
-  "name": "qgis-server-sidecar",
+  "name": "sidecar",
   "version": "1.0.0",
   "description": "Sync QGIS Server data dir",
   "main": "script.mjs",
