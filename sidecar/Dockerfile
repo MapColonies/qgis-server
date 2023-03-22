@@ -1,6 +1,6 @@
 FROM node:14-stretch-slim
 
-RUN apt-get -y update && apt-get -y install curl && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && ./aws/install
+RUN apt-get -y update && apt-get -y install curl unzip && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip 'awscliv2.zip' && './aws/install'
 
 WORKDIR /app
 

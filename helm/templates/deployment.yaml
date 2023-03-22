@@ -44,9 +44,14 @@ spec:
     {{- end }}
       containers:
         - name: {{ $releaseName }}-{{ $chartName }}-sidecar-deployment
+          # imagePullPolicy: Always
           {{- with .Values.sidecar }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
           {{- end }}
+          # For debugging uncomment the following lines
+          # command:
+          #   - sleep
+          #   - infinity
           {{- if .Values.sidecar.resources.enabled }}
           resources:
             {{- toYaml .Values.sidecar.resources.value | nindent 12 }}
@@ -62,7 +67,7 @@ spec:
           {{- with .Values.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
           {{- end }}
-          # For debugging
+          # For debugging uncomment the following lines
           # command:
           #   - sleep
           #   - infinity

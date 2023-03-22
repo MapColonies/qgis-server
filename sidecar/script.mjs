@@ -100,8 +100,15 @@ const syncDataDir = async () => {
       await Promise.all(toSync.map(projectToSync => {
         return Promise.all([
           new Promise(async (resolve) => {
-            const output = (await syncProject(projectToSync)).stdout.trim();
-            if (output.includes('download:')) {
+            let output;
+            try {
+              output = (await syncProject(projectToSync));
+            } catch (e) {
+              logger.debug({ msg: e.stderr.trim() });
+              output = e;
+            }
+
+            if (output?.stdout.trim().includes('download:')) {
               await $`sed -i 's,{RAW_DATA_PROXY_URL},${process.env.RAW_DATA_PROXY_URL},g' ${DATA_DIR}/${projectToSync}`;
               logger.info({ msg: 'Synced', project: projectToSync });
               resolve(true);
@@ -120,11 +127,6 @@ const syncDataDir = async () => {
 
 };
 
-// await $`mkdir -p ${DATA_DIR}`; // Important: root directory '/io' has to be exist before execution of this script!!!
-// const user = await $`whoami`;
-// await $`chown ${user} ${DATA_DIR}`;
-// await $`touch ${CURRENT_STATE_FILE}`;
-// await sleep(waitOnStartup); // wait for QGIS Server to be ready
 while (true) {
   await syncDataDir();
   logger.debug({ msg: 'Sleeping for polling interval', interval: pollingInterval });
