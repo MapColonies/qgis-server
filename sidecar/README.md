@@ -10,7 +10,7 @@ docker image build -t sidecar:v1.0.0 .
 docker container run --rm --name sidecar \
       --network host \
       -e POLLING_INTERVAL=120000 \
-      -e INITIAL_DELAY_SECONDS=60
+      -e INITIAL_DELAY_SECONDS=60 \
       -e LOG_LEVEL=info \
       -e AWS_ACCESS_KEY_ID=raster \
       -e AWS_SECRET_ACCESS_KEY=rasterPassword \

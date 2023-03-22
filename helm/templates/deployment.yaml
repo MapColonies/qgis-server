@@ -43,7 +43,7 @@ spec:
         - name: {{ $cloudProviderImagePullSecretName | quote }}
     {{- end }}
       containers:
-        - name: {{ $releaseName }}-{{ $chartName }}-init-deployment
+        - name: {{ $releaseName }}-{{ $chartName }}-sidecar-deployment
           {{- with .Values.sidecar }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
           {{- end }}
