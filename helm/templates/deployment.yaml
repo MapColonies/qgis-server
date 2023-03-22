@@ -42,16 +42,15 @@ spec:
       imagePullSecrets:
         - name: {{ $cloudProviderImagePullSecretName | quote }}
     {{- end }}
-      initContainers:
+      containers:
         - name: {{ $releaseName }}-{{ $chartName }}-init-deployment
-          image: {{ $cloudProviderDockerRegistryUrl }}{{ .Values.sidecar.repository }}:{{ .Values.sidecar.tag }}
+          {{- with .Values.sidecar }}
+          image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
+          {{- end }}
           {{- if .Values.sidecar.resources.enabled }}
           resources:
             {{- toYaml .Values.sidecar.resources.value | nindent 12 }}
           {{- end }}
-          env:
-            - name: IS_INIT_MODE
-              value: 'true'
           envFrom:
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
@@ -59,7 +58,6 @@ spec:
             - name: qgis-storage
               mountPath: /io/data
               subPath: data
-      containers:
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
           {{- with .Values.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
@@ -88,8 +86,6 @@ spec:
           env:
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
-            - name: IS_INIT_MODE
-              value: 'false'
           envFrom:
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
