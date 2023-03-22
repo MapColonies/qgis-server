@@ -10,6 +10,7 @@ replicaCount: 1
 initialDelaySeconds: 60
 nodePort: 30030 #for minikube deployment only
 resetOnConfigChange: true
+annotations: {}
 
 cloudProvider:
   dockerRegistryUrl: acrarolibotnonprod.azurecr.io
