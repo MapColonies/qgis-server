@@ -34,7 +34,7 @@ s3:
 
 sidecar:
   repository: qgis-server-sidecar
-  tag: v0.1.4
+  tag: v0.1.7
   resources:
     enabled: true
     value:

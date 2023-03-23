@@ -100,18 +100,29 @@ const syncDataDir = async () => {
 
     if (toSync.length) {
       await Promise.all(toSync.map(async (projectToSync) => {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
           let output;
           try {
             output = (await syncProject(projectToSync));
           } catch (e) {
-            logger.debug({ msg: e.stderr.trim() });
-            output = e;
+            const errorMsg = e.stderr.trim();
+            if (!errorMsg?.includes('warning:')) {
+              logger.error({ ERROR: errorMsg });
+              reject('Cannot copy project from bucket');
+            } else {
+              logger.debug({ msg: errorMsg });
+              output = e;
+            }
           }
           if (output?.stdout.trim().includes('download:')) {
-            await $`sed -i 's,{RAW_DATA_PROXY_URL},${process.env.RAW_DATA_PROXY_URL},g' ${DATA_DIR}/${projectToSync}`;
-            logger.info({ msg: 'Synced', project: projectToSync });
-            resolve(true);
+            try {
+              await $`sed -i 's,{RAW_DATA_PROXY_URL},${process.env.RAW_DATA_PROXY_URL},g' ${DATA_DIR}/${projectToSync}`;
+              logger.info({ msg: 'Synced', project: projectToSync });
+              resolve(true);
+            } catch (e) {
+              logger.error({ ERROR: e.stderr.trim() });
+              reject('Cannot replace urls inside the new downloaded project');
+            }
           }
         });
       }));
@@ -121,7 +132,7 @@ const syncDataDir = async () => {
     logger.info({ msg: 'State was updated' });
     logger.debug({ newState: parsedRemoteState });
   } catch (error) {
-    logger.error({ msg: 'Failed', error });
+    logger.error({ msg: error });
   }
 
 };
