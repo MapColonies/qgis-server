@@ -7,7 +7,6 @@ const DATA_DIR = '/io/data';
 const CURRENT_STATE_FILE = path.join(DATA_DIR, 'state.json');
 
 const pollingInterval = +(process.env.POLLING_INTERVAL ?? 1000); // in milliseconds
-// const waitOnStartup = (process.env.INITIAL_DELAY_SECONDS ?? 0) * 1000;
 const logger = jsLogger.default({ level: process.env.LOG_LEVEL ?? 'info' }); // ['debug', 'info', 'warn', 'error', 'fatal']
 
 $.shell = '/bin/bash';
