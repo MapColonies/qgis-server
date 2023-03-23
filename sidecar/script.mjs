@@ -13,7 +13,7 @@ const logger = jsLogger.default({ level: process.env.LOG_LEVEL ?? 'info' }); // 
 $.shell = '/bin/bash';
 $.verbose = false;
 
-const parse = (state) => JSON.parse(state).reduce((parsedState, project) => {
+const parse = (state) => state.reduce((parsedState, project) => {
   const { key, size, lastModified } = project;
   return ({
     ...parsedState,
@@ -63,7 +63,7 @@ const syncDataDir = async () => {
     logger.debug({ msg: 'Getting state from storage', bucket: process.env.AWS_BUCKET_NAME });
     const remoteState = (await getRemoteState()).stdout.trim();
     logger.debug({ remoteState });
-    const parsedRemoteState = parse(remoteState);
+    const parsedRemoteState = parse(JSON.parse(remoteState));
     logger.debug({ parsedRemoteState });
 
     let currentState = '{}';
@@ -92,43 +92,48 @@ const syncDataDir = async () => {
     logger.debug({ toSync });
 
     if (toDelete.length) {
-      await Promise.all(toDelete.map(projectToDelete => $`rm -rf ${path.join(DATA_DIR, projectToDelete, '../../')}`));
+      // When we want to delete some product QGIS related data, then whole product data folder will be deleted
+      // Folder structure is as following:
+      // /io/data/[product_type]/[product_id]/{project | data | style}/[product_id].qgs
+      await Promise.all(toDelete.map(projectToDelete => $`rm -rf ${path.join(DATA_DIR, projectToDelete, '..', '..')}`));
       toDelete.forEach(projectToDelete => logger.info({ msg: 'Deleted', project: projectToDelete }));
     }
 
     if (toSync.length) {
-      await Promise.all(toSync.map(projectToSync => {
-        return Promise.all([
-          new Promise(async (resolve) => {
-            let output;
-            try {
-              output = (await syncProject(projectToSync));
-            } catch (e) {
-              logger.debug({ msg: e.stderr.trim() });
-              output = e;
-            }
-
-            if (output?.stdout.trim().includes('download:')) {
-              await $`sed -i 's,{RAW_DATA_PROXY_URL},${process.env.RAW_DATA_PROXY_URL},g' ${DATA_DIR}/${projectToSync}`;
-              logger.info({ msg: 'Synced', project: projectToSync });
-              resolve(true);
-            }
-          })
-        ]);
+      await Promise.all(toSync.map(async (projectToSync) => {
+        return new Promise(async (resolve) => {
+          let output;
+          try {
+            output = (await syncProject(projectToSync));
+          } catch (e) {
+            logger.debug({ msg: e.stderr.trim() });
+            output = e;
+          }
+          if (output?.stdout.trim().includes('download:')) {
+            await $`sed -i 's,{RAW_DATA_PROXY_URL},${process.env.RAW_DATA_PROXY_URL},g' ${DATA_DIR}/${projectToSync}`;
+            logger.info({ msg: 'Synced', project: projectToSync });
+            resolve(true);
+          }
+        });
       }));
     }
     
     await fs.writeFile(CURRENT_STATE_FILE, JSON.stringify(parsedRemoteState, null, 2), { flag: 'w+' });
     logger.info({ msg: 'State was updated' });
-    logger.debug({ newState: JSON.stringify(parsedRemoteState) });
+    logger.debug({ newState: parsedRemoteState });
   } catch (error) {
     logger.error({ msg: 'Failed', error });
   }
 
 };
 
+
 while (true) {
+
   await syncDataDir();
+
   logger.debug({ msg: 'Sleeping for polling interval', interval: pollingInterval });
+
   await sleep(pollingInterval);
+
 }
