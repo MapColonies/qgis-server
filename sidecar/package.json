@@ -4,7 +4,7 @@
   "description": "Sync QGIS Server data dir",
   "main": "script.mjs",
   "engines": {
-    "node": ">=14.8.0"
+    "node": ">= 16.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
