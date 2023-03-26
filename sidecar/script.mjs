@@ -41,7 +41,11 @@ const getRemoteState = async () => {
     `Contents[?contains(@.Key, \`qgs\`) == \`true\`].{key: Key, size: Size, lastModified: LastModified}`
   ];
   return $`aws s3api ${args}`;
-}
+};
+
+const deleteProject = async (project) => {
+  return $`rm -rf ${path.join(DATA_DIR, project, '..', '..')}`;
+};
 
 const syncProject = async (projectPath) => {
   const projectDir = path.join(projectPath, '..');
@@ -54,7 +58,7 @@ const syncProject = async (projectPath) => {
     `--recursive`
   ]
   return $`aws s3 ${args}`;
-}
+};
 
 const syncDataDir = async () => {
 
@@ -94,34 +98,40 @@ const syncDataDir = async () => {
       // When we want to delete some product QGIS related data, then whole product data folder will be deleted
       // Folder structure is as following:
       // /io/data/[product_type]/[product_id]/{project | data | style}/[product_id].qgs
-      await Promise.all(toDelete.map(projectToDelete => $`rm -rf ${path.join(DATA_DIR, projectToDelete, '..', '..')}`));
+      await Promise.all(toDelete.map(projectToDelete => deleteProject(projectToDelete)));
       toDelete.forEach(projectToDelete => logger.info({ msg: 'Deleted', project: projectToDelete }));
     }
 
     if (toSync.length) {
       await Promise.all(toSync.map(async (projectToSync) => {
         return new Promise(async (resolve, reject) => {
-          let output;
+          await deleteProject(projectToSync);
+          let syncStatus;
           try {
-            output = (await syncProject(projectToSync));
+            syncStatus = await syncProject(projectToSync);
           } catch (e) {
-            const errorMsg = e.stderr.trim();
+            const errorMsg = e.stderr?.trim();
             if (!errorMsg?.includes('warning:')) {
-              logger.error({ ERROR: errorMsg });
-              return reject('Cannot copy project from bucket');
+              logger.error({ ERROR: errorMsg, project: projectToSync });
+              reject('Cannot copy from S3');
             } else {
               logger.debug({ msg: errorMsg });
-              output = e;
+              syncStatus = e;
             }
           }
-          if (output?.stdout.trim().includes('download:')) {
+          if (syncStatus?.stdout.trim().includes('download:')) {
             try {
-              await $`sed -i 's,{RAW_DATA_PROXY_URL},${process.env.RAW_DATA_PROXY_URL},g' ${DATA_DIR}/${projectToSync}`;
-              logger.info({ msg: 'Synced', project: projectToSync });
-              resolve(true);
+              if (fs.existsSync(path.join(DATA_DIR, projectToSync))) {
+                await $`sed -i 's,{RAW_DATA_PROXY_URL},${process.env.RAW_DATA_PROXY_URL},g' ${DATA_DIR}/${projectToSync}`;
+                logger.info({ msg: 'Synced', project: projectToSync });
+                resolve();
+              } else {
+                logger.error({ ERROR: 'not found', project: `${DATA_DIR}/${projectToSync}` });
+                reject('Project was not copied from S3');
+              }
             } catch (e) {
-              logger.error({ ERROR: e.stderr.trim() });
-              return reject('Cannot replace urls inside the new downloaded project');
+              logger.error({ ERROR: e.stderr?.trim() ?? 'Failed to run sed', project: projectToSync });
+              reject('Cannot replace urls inside the new downloaded project');
             }
           }
         });
@@ -129,7 +139,7 @@ const syncDataDir = async () => {
     }
     
     await fs.writeFile(CURRENT_STATE_FILE, JSON.stringify(parsedRemoteState, null, 2), { flag: 'w+' });
-    logger.info({ msg: 'State was updated' });
+    logger.info({ msg: 'Updated new state' });
     logger.debug({ newState: parsedRemoteState });
   } catch (error) {
     logger.error({ msg: error });
