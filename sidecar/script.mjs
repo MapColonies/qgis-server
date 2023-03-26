@@ -108,7 +108,7 @@ const syncDataDir = async () => {
             const errorMsg = e.stderr.trim();
             if (!errorMsg?.includes('warning:')) {
               logger.error({ ERROR: errorMsg });
-              reject('Cannot copy project from bucket');
+              return reject('Cannot copy project from bucket');
             } else {
               logger.debug({ msg: errorMsg });
               output = e;
@@ -121,7 +121,7 @@ const syncDataDir = async () => {
               resolve(true);
             } catch (e) {
               logger.error({ ERROR: e.stderr.trim() });
-              reject('Cannot replace urls inside the new downloaded project');
+              return reject('Cannot replace urls inside the new downloaded project');
             }
           }
         });
