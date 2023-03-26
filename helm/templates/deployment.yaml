@@ -57,6 +57,8 @@ spec:
             {{- toYaml .Values.sidecar.resources.value | nindent 12 }}
           {{- end }}
           envFrom:
+            - secretRef:
+                name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
           volumeMounts:
@@ -93,6 +95,8 @@ spec:
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
           envFrom:
+            - secretRef:
+                name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
           ports:

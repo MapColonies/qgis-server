@@ -6,6 +6,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-{{ $chartName }}-configmap
+  labels:
+{{- include "qgis-server.labels" . | nindent 4 }}
 data:
   REQUEST_PAYLOAD_LIMIT: {{ .Values.env.requestPayloadLimit | quote }}
   RESPONSE_COMPRESSION_ENABLED: {{ .Values.env.responseCompressionEnabled | quote }}
@@ -22,8 +24,6 @@ data:
   {{ if .Values.caSecretName }}
   NODE_EXTRA_CA_CERTS: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
   {{ end }}
-  AWS_ACCESS_KEY_ID: {{ quote .Values.s3.accessKeyId }}
-  AWS_SECRET_ACCESS_KEY: {{ quote .Values.s3.secretAccessKey }}
   AWS_ENDPOINT_URL: {{ quote .Values.s3.endpointUrl }}
   AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
   QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}

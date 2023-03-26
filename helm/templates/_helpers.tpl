@@ -121,3 +121,10 @@ Returns the tracing url from global if exists or from the chart's values
     {{- .Values.env.metrics.url -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns secret name
+*/}}
+{{- define "qgis-server.secretName" -}}
+{{- printf "%s" (include "qgis-server.fullname" .) -}}
+{{- end -}}
