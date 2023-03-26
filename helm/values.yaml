@@ -14,7 +14,8 @@ annotations: {}
 
 cloudProvider:
   dockerRegistryUrl: acrarolibotnonprod.azurecr.io
-  imagePullSecretName: 'acr-registry'
+  imagePullSecretName: acr-registry
+  imagePullPolicy: Always
   flavor: openshift
 
 caSecretName: ''
@@ -34,7 +35,7 @@ s3:
 
 sidecar:
   repository: qgis-server-sidecar
-  tag: v0.1.7
+  tag: v1.0.5
   resources:
     enabled: true
     value:

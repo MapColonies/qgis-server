@@ -1,12 +1,12 @@
-FROM node:16-stretch-slim
+FROM node:14-stretch-slim
 
-RUN apt-get -y update && apt-get -y install curl unzip && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && ./aws/install && npm install --location=global npm@9.6.2
+RUN apt-get -y update && apt-get -y install curl unzip && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && ./aws/install
 
 WORKDIR /app
 
 COPY package*.json /app/
 
-RUN npm i --omit=dev
+RUN npm i --only=production
 
 COPY script.mjs .
 
