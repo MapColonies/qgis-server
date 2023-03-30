@@ -18,7 +18,7 @@ spec:
     name: {{ $releaseName }}-{{ $chartName }}
   port:
     targetPort: http
-  {{- if .Values.route.tls }}
+  {{- if .Values.route.https }}
   tls:
     termination: edge
   {{- end }}
