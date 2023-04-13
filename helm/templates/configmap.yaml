@@ -1,3 +1,4 @@
+{{- $releaseName := .Release.Name -}}
 {{- $chartName := include "qgis-server.name" . -}}
 {{- $tracingUrl := include "qgis-server.tracingUrl" . -}}
 {{- $metricsUrl := include "qgis-server.metricsUrl" . -}}
@@ -5,7 +6,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-{{ $chartName }}-configmap
+  name: {{ $releaseName }}-{{ $chartName }}-configmap
   labels:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:
