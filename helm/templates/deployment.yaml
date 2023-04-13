@@ -97,8 +97,6 @@ spec:
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
           envFrom:
-            - configMapRef:
-                name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
             - secretRef:
                 name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
