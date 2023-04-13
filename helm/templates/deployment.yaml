@@ -90,8 +90,8 @@ spec:
             - name: qgis-storage
               mountPath: /usr/share/fonts
               subPath: fonts
-            # - name: proxy-mount
-            #   mountPath: /etc/nginx
+            - name: proxy-mount
+              mountPath: /etc/nginx
             {{- end }}
           env:
             - name: SERVER_PORT
