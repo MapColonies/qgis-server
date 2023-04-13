@@ -90,11 +90,15 @@ spec:
             - name: qgis-storage
               mountPath: /usr/share/fonts
               subPath: fonts
+            - name: proxy-mount
+              mountPath: /etc/nginx
             {{- end }}
           env:
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
           envFrom:
+            - configMapRef:
+                name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
             - secretRef:
                 name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
@@ -120,11 +124,12 @@ spec:
         {{- end }}
         {{- if .Values.fs.sourcePvc.enabled }}
         - name: qgis-storage
-          # Empty in-memory volume for testing
-          # emptyDir: 
-          #   sizeLimit: 500Mi
-          #   medium: 'Memory'
+          # Empty in-memory volume when no pvc
+          # emptyDir: {}
           persistentVolumeClaim:
             claimName: {{ quote .Values.fs.sourcePvc.name }}
         {{- end }}
+        - name: proxy-mount
+          configMap:
+            name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
 {{- end -}}
