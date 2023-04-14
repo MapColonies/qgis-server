@@ -8,5 +8,6 @@ metadata:
   labels:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:
+  mime.types: {{ .Files.Get "config/mime.types" | quote }}
   nginx.conf: {{ tpl (.Files.Get "config/nginx.conf") . | quote }}
 {{- end }}
