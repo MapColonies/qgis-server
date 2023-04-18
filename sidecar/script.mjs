@@ -34,9 +34,9 @@ const getRemoteState = async () => {
   const args = [
     `list-objects`,
     `--endpoint-url`,
-    `${process.env.AWS_ENDPOINT_URL}`,
+    process.env.AWS_ENDPOINT_URL,
     `--bucket`,
-    `${process.env.AWS_BUCKET_NAME}`,
+    process.env.AWS_BUCKET_NAME,
     `--query`,
     `Contents[?contains(@.Key, \`qgs\`) == \`true\`].{key: Key, size: Size, lastModified: LastModified}`
   ];
