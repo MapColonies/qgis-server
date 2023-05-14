@@ -66,7 +66,7 @@ env:
     url: http://localhost:55681/v1/metrics
   qgisServerLogFile: /var/tmp/qgisserver.log
   qgisServerLogLevel: 1
-  rawDataProxyUrl: http://client-int-qgis-integration-nginx-s3-gateway:8080
+  rawDataProxyUrl: http://dem-int-proxy-production-nginx-s3-gateway
   pollingInterval: 300000
 
 resources:
