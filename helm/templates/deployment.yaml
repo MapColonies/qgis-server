@@ -120,13 +120,12 @@ spec:
           secret:
             secretName: {{ .Values.caSecretName }}
         {{- end }}
-        - name: qgis-storage
         {{- if .Values.fs.sourcePvc.enabled }}
+        - name: qgis-storage
+          # Empty in-memory volume when no pvc
+          # emptyDir: {}
           persistentVolumeClaim:
             claimName: {{ quote .Values.fs.sourcePvc.name }}
-        {{- else }}
-          # Empty in-memory volume when no pvc
-          emptyDir: {}
         {{- end }}
         - name: proxy-mount
           configMap:
