@@ -1,4 +1,4 @@
-# qgis-server-helm
+# qgis-server
 This repo contains a helm chart to deploy QGIS Server with reloading data directory from S3 to openshift.
 
 ## Why
