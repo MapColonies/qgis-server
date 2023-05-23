@@ -68,6 +68,7 @@ env:
   qgisServerLogLevel: 1
   rawDataProxyUrl: http://dem-int-proxy-production-nginx-s3-gateway
   pollingInterval: 300000
+  productTypes:
 
 resources:
   enabled: true
