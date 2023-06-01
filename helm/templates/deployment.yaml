@@ -62,9 +62,16 @@ spec:
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
           volumeMounts:
+            {{- if .Values.caSecretName }}
+            - name: root-ca
+              mountPath: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
+              subPath: {{ quote .Values.caKey }}
+            {{- end }}
+            {{- if .Values.fs.sourcePvc.enabled  }}
             - name: qgis-storage
               mountPath: /io/data
               subPath: data
+            {{- end }}
         - name: {{ $releaseName }}-{{ $chartName }}-deployment
           {{- with .Values.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}

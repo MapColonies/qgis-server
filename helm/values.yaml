@@ -19,8 +19,8 @@ cloudProvider:
   flavor: openshift
 
 caSecretName: ''
-caPath: '/usr/local/share/ca-certificates'
-caKey: 'ca.crt'
+caPath: /usr/local/share/ca-certificates
+caKey: ca.crt
 
 fs:
   sourcePvc:
@@ -35,20 +35,20 @@ s3:
 
 sidecar:
   repository: qgis-server-sidecar
-  tag: v1.0.5
+  tag: v1.0.0
   resources:
     enabled: true
     value:
       limits:
-        cpu: 200m
-        memory: 1Gi
+        cpu: 400m
+        memory: 1200Mi
       requests:
-        cpu: 50m
-        memory: 1Gi
+        cpu: 100m
+        memory: 1200Mi
 
 image:
   repository: qgis-server
-  tag: v0.1.0
+  tag: v1.0.0
 
 env:
   port: 80
@@ -74,11 +74,11 @@ resources:
   enabled: true
   value:
     limits:
-      cpu: 200m
-      memory: 4Gi
+      cpu: 1000m
+      memory: 900Mi
     requests:
-      cpu: 50m
-      memory: 4Gi
+      cpu: 250m
+      memory: 900Mi
 
 route:
   enabled: true
@@ -90,7 +90,7 @@ route:
 
 ingress:
   enabled: false
-  type: 'nginx-kubernetes' # supported values: 'nginx-org' | 'nginx-kubernetes'
+  type: nginx-kubernetes # supported values: 'nginx-org' | 'nginx-kubernetes'
   host: localhost
   path: /
   cors:

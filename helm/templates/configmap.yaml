@@ -24,7 +24,10 @@ data:
   {{ end }}
   {{ if .Values.caSecretName }}
   NODE_EXTRA_CA_CERTS: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
+  REQUESTS_CA_BUNDLE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
   {{ end }}
+  AWS_PAGER: ""
+  AWS_CA_BUNDLE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
   AWS_ENDPOINT_URL: {{ quote .Values.s3.endpointUrl }}
   AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
   QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}
