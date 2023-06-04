@@ -8,7 +8,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $releaseName }}-{{ $chartName }}
+  name: {{ $releaseName }}
   labels:
     app: {{ $chartName }}
     component: {{ $chartName }}
@@ -43,7 +43,7 @@ spec:
         - name: {{ $cloudProviderImagePullSecretName | quote }}
     {{- end }}
       containers:
-        - name: {{ $releaseName }}-{{ $chartName }}-sidecar-deployment
+        - name: {{ $releaseName }}-sidecar-deployment
           {{- with .Values.sidecar }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
           {{- end }}
@@ -60,7 +60,7 @@ spec:
             - secretRef:
                 name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
-                name: {{ $releaseName }}-{{ $chartName }}-configmap
+                name: {{ $releaseName }}-configmap
           volumeMounts:
             {{- if .Values.caSecretName }}
             - name: root-ca
@@ -72,7 +72,7 @@ spec:
               mountPath: /io/data
               subPath: data
             {{- end }}
-        - name: {{ $releaseName }}-{{ $chartName }}-deployment
+        - name: {{ $releaseName }}-deployment
           {{- with .Values.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
           {{- end }}
@@ -107,7 +107,7 @@ spec:
             - secretRef:
                 name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
-                name: {{ $releaseName }}-{{ $chartName }}-configmap
+                name: {{ $releaseName }}-configmap
           ports:
             - name: http
               containerPort: {{ .Values.env.targetPort }}
@@ -136,5 +136,5 @@ spec:
         {{- end }}
         - name: proxy-mount
           configMap:
-            name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
+            name: {{ $releaseName }}-proxy-configmap
 {{- end -}}

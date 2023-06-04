@@ -4,7 +4,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
+  name: {{ $releaseName }}-proxy-configmap
   labels:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:

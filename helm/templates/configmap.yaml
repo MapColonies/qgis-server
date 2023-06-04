@@ -6,7 +6,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $releaseName }}-{{ $chartName }}-configmap
+  name: {{ $releaseName }}-configmap
   labels:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:
