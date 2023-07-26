@@ -67,7 +67,7 @@ spec:
               mountPath: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
               subPath: {{ quote .Values.caKey }}
             {{- end }}
-            {{- if .Values.fs.sourcePvc.enabled  }}
+            {{- if .Values.fs.sourcePvc.enabled }}
             - name: qgis-storage
               mountPath: /io/data
               subPath: data
