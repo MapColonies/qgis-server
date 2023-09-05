@@ -41,10 +41,10 @@ sidecar:
     value:
       limits:
         cpu: 400m
-        memory: 200Mi
+        memory: 1Gi
       requests:
         cpu: 100m
-        memory: 200Mi
+        memory: 1Gi
 
 image:
   repository: qgis-server
