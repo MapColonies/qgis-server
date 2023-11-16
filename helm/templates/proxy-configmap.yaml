@@ -8,6 +8,7 @@ metadata:
   labels:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:
+  auth.js: {{ tpl (.Files.Get "config/auth.js") . | quote }}
   log_format.conf: {{ tpl (.Files.Get "config/log_format.conf") . | quote }}
   fastcgi_params: {{ .Files.Get "config/fastcgi_params" | quote }}
   mime.types: {{ .Files.Get "config/mime.types" | quote }}
