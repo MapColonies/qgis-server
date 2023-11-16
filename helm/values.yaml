@@ -22,6 +22,11 @@ caSecretName: ''
 caPath: /usr/local/share/ca-certificates
 caKey: ca.crt
 
+authorization:
+  enabled: false
+  domain: dem
+  url:
+
 fs:
   sourcePvc:
     enabled: true
