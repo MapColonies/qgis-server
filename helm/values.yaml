@@ -5,7 +5,7 @@ global:
   environment: {}
 
 enabled: true
-environment: integration
+environment: production
 replicaCount: 1
 initialDelaySeconds: 60
 nodePort: 30030 #for minikube deployment only
