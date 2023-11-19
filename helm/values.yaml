@@ -97,7 +97,7 @@ ingress:
   enabled: false
   type: nginx-kubernetes # supported values: 'nginx-org' | 'nginx-kubernetes'
   host:
-  path: /
+  path: /dem-qgis-server
   cors:
     enabled: true
     origin: '*'
