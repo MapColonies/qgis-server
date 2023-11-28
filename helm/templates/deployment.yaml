@@ -70,7 +70,7 @@ spec:
             {{- if .Values.fs.sourcePvc.enabled }}
             - name: qgis-storage
               mountPath: /io/data
-              subPath: data
+              subPath: dem/qgis-server/data
             {{- end }}
         - name: {{ $releaseName }}-deployment
           {{- with .Values.image }}
@@ -90,13 +90,13 @@ spec:
             {{- if .Values.fs.sourcePvc.enabled  }}
             - name: qgis-storage
               mountPath: /io/data
-              subPath: data
+              subPath: dem/qgis-server/data
             - name: qgis-storage
               mountPath: /io/plugins
-              subPath: plugins
+              subPath: dem/qgis-server/plugins
             - name: qgis-storage
               mountPath: /usr/share/fonts
-              subPath: fonts
+              subPath: dem/qgis-server/fonts
             - name: proxy-mount
               mountPath: /etc/nginx
             {{- end }}
