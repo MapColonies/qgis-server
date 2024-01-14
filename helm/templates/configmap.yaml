@@ -35,11 +35,9 @@ data:
   RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}
   POLLING_INTERVAL: {{ quote .Values.env.pollingInterval }}
   PRODUCT_TYPES: {{ quote .Values.env.productTypes }}
-  AWS_ACCESS_KEY_ID: "raster"
   AWS_HTTPS: "NO"
   AWS_REGION: "us-east-1"
   AWS_S3_ENDPOINT: "10.8.0.9:9000"
-  AWS_SECRET_ACCESS_KEY: "rasterPassword"
   AWS_VIRTUAL_HOSTING: "FALSE"
   AWS_NO_SIGN_REQUEST: "NO"
 {{- end }}
