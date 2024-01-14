@@ -41,4 +41,5 @@ data:
   AWS_S3_ENDPOINT: "10.8.0.9:9000"
   AWS_SECRET_ACCESS_KEY: "rasterPassword"
   AWS_VIRTUAL_HOSTING: "FALSE"
+  AWS_NO_SIGN_REQUEST: "NO"
 {{- end }}
