@@ -39,5 +39,4 @@ data:
   AWS_REGION: "us-east-1"
   AWS_S3_ENDPOINT: "10.8.0.9:9000"
   AWS_VIRTUAL_HOSTING: "FALSE"
-  AWS_NO_SIGN_REQUEST: "NO"
 {{- end }}
