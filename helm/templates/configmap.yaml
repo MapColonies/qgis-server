@@ -30,13 +30,13 @@ data:
   AWS_CA_BUNDLE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
   AWS_ENDPOINT_URL: {{ quote .Values.s3.endpointUrl }}
   AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
+  AWS_HTTPS: {{ quote .Values.s3.awsHTTPS }}
+  AWS_REGION: {{ quote .Values.s3.awsRegion }}
+  AWS_S3_ENDPOINT: {{ quote .Values.s3.awsS3Endpoint }}
+  AWS_VIRTUAL_HOSTING: {{ quote .Values.s3.awsVirtualHosting }}
   QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}
   QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.qgisServerLogLevel }}
   RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}
   POLLING_INTERVAL: {{ quote .Values.env.pollingInterval }}
   PRODUCT_TYPES: {{ quote .Values.env.productTypes }}
-  AWS_HTTPS: "NO"
-  AWS_REGION: "us-east-1"
-  AWS_S3_ENDPOINT: "10.8.0.9:9000"
-  AWS_VIRTUAL_HOSTING: "FALSE"
 {{- end }}

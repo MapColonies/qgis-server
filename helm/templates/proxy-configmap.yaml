@@ -9,7 +9,7 @@ metadata:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:
   log_format.conf: {{ tpl (.Files.Get "config/log_format.conf") . | quote }}
-  fastcgi_params: {{ .Files.Get "config/fastcgi_params" | quote }}
+  fastcgi_params: {{ tpl (.Files.Get "config/fastcgi_params") . | quote }}
   mime.types: {{ .Files.Get "config/mime.types" | quote }}
   nginx.conf: {{ tpl (.Files.Get "config/nginx.conf") . | quote }}
 {{- end }}

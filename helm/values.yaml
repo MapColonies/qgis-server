@@ -37,6 +37,10 @@ s3:
   secretAccessKey: rasterPassword
   endpointUrl: http://10.8.0.9:9000
   bucketName: dem-int
+  awsHTTPS: NO
+  awsRegion: us-east-1
+  awsS3Endpoint: 10.8.0.9:9000
+  awsVirtualHosting: FALSE
 
 sidecar:
   repository: qgis-server-sidecar
