@@ -99,6 +99,8 @@ spec:
               subPath: dem/qgis-server/fonts
             - name: proxy-mount
               mountPath: /etc/nginx
+            - name: secret-volume
+              mountPath: /.aws/credentials
             {{- end }}
           env:
             - name: SERVER_PORT
@@ -134,6 +136,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ quote .Values.fs.sourcePvc.name }}
         {{- end }}
+        - name: secret-volume
+          secret:
+            secretName: {{ template "qgis-server.secretName" . }}
         - name: proxy-mount
           configMap:
             name: {{ $releaseName }}-proxy-configmap
