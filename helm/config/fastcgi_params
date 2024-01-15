@@ -26,3 +26,7 @@ fastcgi_param  REDIRECT_STATUS    200;
 
 fastcgi_param  AWS_ACCESS_KEY_ID    raster;
 fastcgi_param  AWS_SECRET_ACCESS_KEY    rasterPassword;
+fastcgi_param  AWS_HTTPS    NO;
+fastcgi_param  AWS_REGION   us-east-1;
+fastcgi_param  AWS_S3_ENDPOINT  10.8.0.9:9000;
+fastcgi_param  AWS_VIRTUAL_HOSTING  FALSE;
