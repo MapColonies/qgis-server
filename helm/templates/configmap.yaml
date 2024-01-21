@@ -28,12 +28,16 @@ data:
   {{ end }}
   AWS_PAGER: ""
   AWS_CA_BUNDLE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
-  AWS_ENDPOINT_URL: {{ quote .Values.s3.endpointUrl }}
-  AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
-  AWS_HTTPS: {{ quote .Values.s3.awsHTTPS }}
+  {{ if .Values.s3.awsHttps }}
+  AWS_ENDPOINT_URL: {{ printf "%s://%s" "https" .Values.s3.awsS3Endpoint }}
+  {{ else }}
+  AWS_ENDPOINT_URL: {{ printf "%s://%s" "http" .Values.s3.awsS3Endpoint }}
+  {{ end }}
   AWS_REGION: {{ quote .Values.s3.awsRegion }}
+  AWS_HTTPS: {{ quote .Values.s3.awsHttps }}
   AWS_S3_ENDPOINT: {{ quote .Values.s3.awsS3Endpoint }}
   AWS_VIRTUAL_HOSTING: {{ quote .Values.s3.awsVirtualHosting }}
+  AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
   QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}
   QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.qgisServerLogLevel }}
   RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}
