@@ -42,5 +42,7 @@ data:
   QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.qgisServerLogLevel }}
   RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}
   POLLING_INTERVAL: {{ quote .Values.env.pollingInterval }}
-  PRODUCT_TYPES: {{ quote .Values.env.productTypes | quote }}
+  {{ if .Values.env.productTypes }}
+  PRODUCT_TYPES: {{ quote .Values.env.productTypes }}
+  {{ end }}
 {{- end }}
