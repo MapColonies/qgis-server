@@ -1,7 +1,7 @@
 {{- $releaseName := .Release.Name -}}
-{{- $chartName := include "qgis-server.name" . -}}
 {{- $tracingUrl := include "qgis-server.tracingUrl" . -}}
 {{- $metricsUrl := include "qgis-server.metricsUrl" . -}}
+{{- $serverProto := ternary "https" "http" .Values.s3.awsHttps -}}
 {{- if .Values.enabled -}}
 apiVersion: v1
 kind: ConfigMap
@@ -28,16 +28,14 @@ data:
   {{ end }}
   AWS_PAGER: ""
   AWS_CA_BUNDLE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
-  {{ if .Values.s3.awsHttps }}
-  AWS_ENDPOINT_URL: {{ printf "%s://%s" "https" .Values.s3.awsS3Endpoint }}
-  {{ else }}
-  AWS_ENDPOINT_URL: {{ printf "%s://%s" "http" .Values.s3.awsS3Endpoint }}
-  {{ end }}
+  AWS_ENDPOINT_URL: {{ printf "%s://%s:%d" $serverProto .Values.s3.server (.Values.s3.serverPort | int) | quote }}
   AWS_REGION: {{ quote .Values.s3.awsRegion }}
   AWS_HTTPS: {{ quote .Values.s3.awsHttps }}
-  AWS_S3_ENDPOINT: {{ quote .Values.s3.awsS3Endpoint }}
+  AWS_S3_ENDPOINT: {{ printf "%s:%d" .Values.s3.server (.Values.s3.serverPort | int) | quote }}
   AWS_VIRTUAL_HOSTING: {{ quote .Values.s3.awsVirtualHosting }}
   AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
+  SSL_CERT_FILE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
+  # GDAL_HTTP_UNSAFESSL: {{ quote .Values.s3.gdalHttpUnsafessl }}
   QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}
   QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.qgisServerLogLevel }}
   RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}

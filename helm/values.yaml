@@ -37,9 +37,11 @@ s3:
   secretAccessKey: rasterPassword
   awsRegion: us-east-1
   awsHttps: true
-  awsS3Endpoint: 10.8.0.9:9000
+  server: 10.8.0.9
+  serverPort: 9000
   awsVirtualHosting: false
   bucketName: dem-int
+  # gdalHttpUnsafessl: true
 
 sidecar:
   repository: qgis-server-sidecar
