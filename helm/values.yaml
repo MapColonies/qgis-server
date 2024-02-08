@@ -38,7 +38,7 @@ s3:
   awsRegion: us-east-1
   awsHttps: true
   server: 10.8.0.9
-  serverPort: 9000
+  serverPort:
   awsVirtualHosting: false
   bucketName: dem-int
   # gdalHttpUnsafessl: true

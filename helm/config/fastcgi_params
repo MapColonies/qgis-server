@@ -28,7 +28,11 @@ fastcgi_param  AWS_ACCESS_KEY_ID      {{ .Values.s3.accessKeyId }};
 fastcgi_param  AWS_SECRET_ACCESS_KEY  {{ .Values.s3.secretAccessKey }};
 fastcgi_param  AWS_REGION             {{ .Values.s3.awsRegion }};
 fastcgi_param  AWS_HTTPS              {{ .Values.s3.awsHttps }};
+{{ if .Values.s3.serverPort }}
 fastcgi_param  AWS_S3_ENDPOINT        {{ printf "%s:%d" .Values.s3.server (.Values.s3.serverPort | int) | quote }};
+{{ else }}
+fastcgi_param  AWS_S3_ENDPOINT        {{ printf "%s" .Values.s3.server | quote }};
+{{ end }}
 fastcgi_param  AWS_VIRTUAL_HOSTING    {{ .Values.s3.awsVirtualHosting }};
 fastcgi_param  AWS_BUCKET_NAME        {{ .Values.s3.bucketName }};
 fastcgi_param  SSL_CERT_FILE          {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }};

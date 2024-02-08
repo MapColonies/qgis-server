@@ -28,10 +28,18 @@ data:
   {{ end }}
   AWS_PAGER: ""
   AWS_CA_BUNDLE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
+  {{ if .Values.s3.serverPort }}
   AWS_ENDPOINT_URL: {{ printf "%s://%s:%d" $serverProto .Values.s3.server (.Values.s3.serverPort | int) | quote }}
+  {{ else }}
+  AWS_ENDPOINT_URL: {{ printf "%s://%s" $serverProto .Values.s3.server | quote }}
+  {{ end }}
   AWS_REGION: {{ quote .Values.s3.awsRegion }}
   AWS_HTTPS: {{ quote .Values.s3.awsHttps }}
+  {{ if .Values.s3.serverPort }}
   AWS_S3_ENDPOINT: {{ printf "%s:%d" .Values.s3.server (.Values.s3.serverPort | int) | quote }}
+  {{ else }}
+  AWS_S3_ENDPOINT: {{ printf "%s" .Values.s3.server | quote }}
+  {{ end }}
   AWS_VIRTUAL_HOSTING: {{ quote .Values.s3.awsVirtualHosting }}
   AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
   SSL_CERT_FILE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
