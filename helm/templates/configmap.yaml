@@ -1,12 +1,13 @@
+{{- if .Values.enabled -}}
 {{- $releaseName := .Release.Name -}}
+{{- $chartName := include "qgis-server.name" . -}}
 {{- $tracingUrl := include "qgis-server.tracingUrl" . -}}
 {{- $metricsUrl := include "qgis-server.metricsUrl" . -}}
 {{- $serverProto := ternary "https" "http" .Values.s3.awsHttps -}}
-{{- if .Values.enabled -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $releaseName }}-configmap
+  name: {{ $releaseName }}-{{ $chartName }}-configmap
   labels:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:

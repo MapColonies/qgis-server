@@ -1,10 +1,10 @@
+{{- if .Values.enabled -}}
 {{- $releaseName := .Release.Name -}}
 {{- $chartName := include "qgis-server.name" . -}}
+{{- $imageTag := include "qgis-server.tag" . -}}
 {{- $cloudProviderFlavor := include "qgis-server.cloudProviderFlavor" . -}}
 {{- $cloudProviderDockerRegistryUrl := include "qgis-server.cloudProviderDockerRegistryUrl" . -}}
 {{- $cloudProviderImagePullSecretName := include "qgis-server.cloudProviderImagePullSecretName" . -}}
-{{- $imageTag := include "qgis-server.tag" . -}}
-{{- if .Values.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -60,7 +60,7 @@ spec:
             - secretRef:
                 name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
-                name: {{ $releaseName }}-configmap
+                name: {{ $releaseName }}-{{ $chartName }}-configmap
           volumeMounts:
             {{- if .Values.caSecretName }}
             - name: root-ca
@@ -107,7 +107,7 @@ spec:
             - secretRef:
                 name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
-                name: {{ $releaseName }}-configmap
+                name: {{ $releaseName }}-{{ $chartName }}-configmap
           ports:
             - name: http
               containerPort: {{ .Values.env.targetPort }}
@@ -136,5 +136,5 @@ spec:
         {{- end }}
         - name: proxy-mount
           configMap:
-            name: {{ $releaseName }}-proxy-configmap
+            name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
 {{- end -}}

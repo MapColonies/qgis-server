@@ -1,9 +1,10 @@
-{{- $releaseName := .Release.Name -}}
 {{- if .Values.enabled -}}
+{{- $releaseName := .Release.Name -}}
+{{- $chartName := include "qgis-server.name" . -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $releaseName }}-proxy-configmap
+  name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
   labels:
 {{- include "qgis-server.labels" . | nindent 4 }}
 data:
