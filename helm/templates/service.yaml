@@ -1,11 +1,11 @@
+{{- if .Values.enabled -}}
 {{- $releaseName := .Release.Name -}}
 {{- $chartName := include "qgis-server.name" . -}}
 {{- $cloudProviderFlavor := include "qgis-server.cloudProviderFlavor" . -}}
-{{- if .Values.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $releaseName }}
+  name: {{ $releaseName }}-{{ $chartName }}
   labels:
     app: {{ $chartName }}
     component: {{ $chartName }}

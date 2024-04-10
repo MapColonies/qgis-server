@@ -1,10 +1,11 @@
-{{- $releaseName := .Release.Name -}}
 {{- $cloudProviderFlavor := include "qgis-server.cloudProviderFlavor" . -}}
 {{- if and (and (.Values.enabled) (eq $cloudProviderFlavor "openshift")) (.Values.route.enabled) -}}
+{{- $releaseName := .Release.Name -}}
+{{- $chartName := include "qgis-server.name" . -}}
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: {{ $releaseName }}-route
+  name: {{ $releaseName }}-{{ $chartName }}
   annotations:
     haproxy.router.openshift.io/rewrite-target: /
     {{- if .Values.route.timeout.enabled }}
@@ -14,7 +15,7 @@ spec:
   path:  {{ .Values.route.path | default "/" }}
   to:
     kind: Service
-    name: {{ $releaseName }}
+    name: {{ $releaseName }}-{{ $chartName }}
   port:
     targetPort: http
   {{- if .Values.route.https }}

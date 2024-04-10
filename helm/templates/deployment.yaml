@@ -8,7 +8,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $releaseName }}
+  name: {{ $releaseName }}-{{ $chartName }}
   labels:
     app: {{ $chartName }}
     component: {{ $chartName }}
@@ -43,7 +43,7 @@ spec:
         - name: {{ $cloudProviderImagePullSecretName | quote }}
     {{- end }}
       containers:
-        - name: {{ $releaseName }}-sidecar-deployment
+        - name: {{ $chartName }}-sidecar
           {{- with .Values.sidecar }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ .tag }}
           {{- end }}
@@ -72,7 +72,7 @@ spec:
               mountPath: /io/data
               subPath: dem/qgis-server/data
             {{- end }}
-        - name: {{ $releaseName }}-deployment
+        - name: {{ $chartName }}
           {{- with .Values.image }}
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
           {{- end }}
