@@ -92,7 +92,8 @@ resources:
 
 route:
   enabled: true
-  path: /
+  host:
+  path: /api/dem/v1/preview
   timeout:
     enabled: false # defaults to 30s by openshift
     duration: 60s # supported units (us, ms, s, m, h, d)
