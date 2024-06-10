@@ -12,14 +12,23 @@ metadata:
     haproxy.router.openshift.io/timeout: {{ .Values.route.timeout.duration }}
     {{- end }}
 spec:
-  path:  {{ .Values.route.path | default "/" }}
+  {{- if .Values.route.host }}
+  host: {{ .Values.route.host | quote }}
+  {{- end }}
+  path: {{ .Values.route.path | default "/" }}
   to:
     kind: Service
     name: {{ $releaseName }}-{{ $chartName }}
   port:
     targetPort: http
-  {{- if .Values.route.https }}
+  {{- if .Values.route.tls.enabled }}
   tls:
     termination: edge
+    {{- if .Values.route.tls.useCert }}
+    certificate: {{ .Values.route.tls.certificate | quote }}
+    key: {{ .Values.route.tls.key | quote }}
+    caCertificate: {{ .Values.route.tls.caCertificate | quote }}
+    insecureEdgeTerminationPolicy: Redirect
+    {{- end }}
   {{- end }}
 {{- end -}}
