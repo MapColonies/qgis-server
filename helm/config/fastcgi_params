@@ -24,8 +24,10 @@ fastcgi_param  SERVER_NAME        $server_name;
 # PHP only, required if PHP was built with --enable-force-cgi-redirect
 fastcgi_param  REDIRECT_STATUS    200;
 
+{{- if not .Values.s3.secretName }}
 fastcgi_param  AWS_ACCESS_KEY_ID      {{ .Values.s3.accessKeyId }};
 fastcgi_param  AWS_SECRET_ACCESS_KEY  {{ .Values.s3.secretAccessKey }};
+{{- end }}
 fastcgi_param  AWS_REGION             {{ .Values.s3.awsRegion }};
 fastcgi_param  AWS_HTTPS              {{ .Values.s3.awsHttps }};
 {{ if .Values.s3.serverPort }}

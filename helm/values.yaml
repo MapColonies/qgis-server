@@ -33,6 +33,8 @@ fs:
     name: dem-pvc-int
 
 s3:
+  # Existing Secret with keys accessKeyId and secretAccessKey; when set, accessKeyId and secretAccessKey are ignored.
+  secretName: ""
   accessKeyId: raster
   secretAccessKey: rasterPassword
   awsRegion: us-east-1

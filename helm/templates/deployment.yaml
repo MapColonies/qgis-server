@@ -56,9 +56,18 @@ spec:
           resources:
             {{- toYaml .Values.sidecar.resources.value | nindent 12 }}
           {{- end }}
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "qgis-server.secretName" . }}
+                  key: accessKeyId
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "qgis-server.secretName" . }}
+                  key: secretAccessKey
           envFrom:
-            - secretRef:
-                name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
           volumeMounts:
@@ -101,11 +110,19 @@ spec:
               mountPath: /etc/nginx
             {{- end }}
           env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "qgis-server.secretName" . }}
+                  key: accessKeyId
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "qgis-server.secretName" . }}
+                  key: secretAccessKey
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
           envFrom:
-            - secretRef:
-                name: {{ template "qgis-server.secretName" . }}
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
           ports:
