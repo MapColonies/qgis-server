@@ -33,8 +33,10 @@ fs:
     name: dem-pvc-int
 
 s3:
-  # Existing Secret with keys accessKeyId and secretAccessKey; when set, accessKeyId and secretAccessKey are ignored.
-  secretName: ""
+  # Secret with keys accessKeyId and secretAccessKey; must already exist unless createSecret is true.
+  secretName: s3-secret
+  createSecret: false
+  # used only when createSecret is true
   accessKeyId: raster
   secretAccessKey: rasterPassword
   awsRegion: us-east-1

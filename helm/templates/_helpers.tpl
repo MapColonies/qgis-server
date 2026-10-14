@@ -126,5 +126,5 @@ Returns the tracing url from global if exists or from the chart's values
 Returns secret name
 */}}
 {{- define "qgis-server.secretName" -}}
-{{- .Values.s3.secretName | default (printf "s3-%s" (include "qgis-server.fullname" .)) -}}
+{{- .Values.s3.secretName | default "s3-secret" -}}
 {{- end -}}
