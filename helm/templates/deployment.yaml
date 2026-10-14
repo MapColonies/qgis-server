@@ -42,6 +42,28 @@ spec:
       imagePullSecrets:
         - name: {{ $cloudProviderImagePullSecretName | quote }}
     {{- end }}
+      {{- if .Values.fs.sourcePvc.enabled }}
+      initContainers:
+        # nginx can't put env vars into fastcgi_param, so the S3 keys are filled into a copy of the proxy config here rather than stored in the ConfigMap.
+        - name: {{ $chartName }}-proxy-config
+          {{- with .Values.image }}
+          image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.cloudProvider.imagePullPolicy }}
+          command: ["sh", "-c"]
+          args:
+            - |
+              esc() { printf '%s' "$1" | sed 's/[\\&|]/\\&/g'; }
+              cp /proxy-template/* /proxy/ &&
+              sed -i -e "s|__AWS_ACCESS_KEY_ID__|$(esc "$AWS_ACCESS_KEY_ID")|" -e "s|__AWS_SECRET_ACCESS_KEY__|$(esc "$AWS_SECRET_ACCESS_KEY")|" /proxy/fastcgi_params
+          env:
+            {{- include "qgis-server.s3Env" . | nindent 12 }}
+          volumeMounts:
+            - name: proxy-template
+              mountPath: /proxy-template
+            - name: proxy-mount
+              mountPath: /proxy
+      {{- end }}
       containers:
         - name: {{ $chartName }}-sidecar
           {{- with .Values.sidecar }}
@@ -57,16 +79,7 @@ spec:
             {{- toYaml .Values.sidecar.resources.value | nindent 12 }}
           {{- end }}
           env:
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "qgis-server.secretName" . }}
-                  key: accessKeyId
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "qgis-server.secretName" . }}
-                  key: secretAccessKey
+            {{- include "qgis-server.s3Env" . | nindent 12 }}
           envFrom:
             - configMapRef:
                 name: {{ $releaseName }}-{{ $chartName }}-configmap
@@ -110,16 +123,7 @@ spec:
               mountPath: /etc/nginx
             {{- end }}
           env:
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "qgis-server.secretName" . }}
-                  key: accessKeyId
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ template "qgis-server.secretName" . }}
-                  key: secretAccessKey
+            {{- include "qgis-server.s3Env" . | nindent 12 }}
             - name: SERVER_PORT
               value: {{ .Values.env.targetPort | quote }}
           envFrom:
@@ -151,7 +155,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ quote .Values.fs.sourcePvc.name }}
         {{- end }}
-        - name: proxy-mount
+        - name: proxy-template
           configMap:
             name: {{ $releaseName }}-{{ $chartName }}-proxy-configmap
+        - name: proxy-mount
+          emptyDir: {}
 {{- end -}}

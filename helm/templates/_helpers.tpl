@@ -128,3 +128,16 @@ Returns secret name
 {{- define "qgis-server.secretName" -}}
 {{- .Values.s3.secretName | default "s3-secret" -}}
 {{- end -}}
+
+{{- define "qgis-server.s3Env" -}}
+- name: AWS_ACCESS_KEY_ID
+  valueFrom:
+    secretKeyRef:
+      name: {{ template "qgis-server.secretName" . }}
+      key: accessKeyId
+- name: AWS_SECRET_ACCESS_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ template "qgis-server.secretName" . }}
+      key: secretAccessKey
+{{- end -}}
