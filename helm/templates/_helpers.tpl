@@ -125,8 +125,17 @@ Returns the tracing url from global if exists or from the chart's values
 {{/*
 Returns secret name
 */}}
+{{/*
+S3 credential settings: the chart's s3 values, with empty ones taken from global.storage.s3 (as in the raster charts).
+*/}}
+{{- define "qgis-server.s3Credentials" -}}
+{{- $global := dig "storage" "s3" dict (.Values.global | default dict) -}}
+{{- merge (pick .Values.s3 "secretName" "createSecret" "accessKeyId" "secretAccessKey") (pick $global "secretName" "createSecret" "accessKeyId" "secretAccessKey") | toYaml -}}
+{{- end -}}
+
 {{- define "qgis-server.secretName" -}}
-{{- .Values.s3.secretName | default "s3-secret" -}}
+{{- $s3 := include "qgis-server.s3Credentials" . | fromYaml -}}
+{{- $s3.secretName | default (printf "s3-%s" (include "qgis-server.fullname" .)) -}}
 {{- end -}}
 
 {{- define "qgis-server.s3Env" -}}

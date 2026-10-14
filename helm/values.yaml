@@ -3,6 +3,9 @@ global:
   tracing: {}
   metrics: {}
   environment: ''
+  storage:
+    s3:
+      secretName: ""
 
 enabled: true
 environment: production
@@ -33,11 +36,11 @@ fs:
     name: dem-pvc-int
 
 s3:
-  # Secret with keys accessKeyId and secretAccessKey; must already exist unless createSecret is true.
-  secretName: s3-secret
+  # Secret with keys accessKeyId and secretAccessKey (default s3-<release>-<chart>); must already exist unless createSecret is true. Empty values fall back to global.storage.s3.
+  secretName: ""
   createSecret: false
-  accessKeyId: raster
-  secretAccessKey: rasterPassword
+  accessKeyId: ""
+  secretAccessKey: ""
   awsRegion: us-east-1
   awsHttps: true
   server: 10.8.0.9
