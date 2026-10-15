@@ -1,4 +1,4 @@
-
+{{- $s3 := include "qgis-server.s3" . | fromYaml }}
 fastcgi_param  QUERY_STRING       $query_string;
 fastcgi_param  REQUEST_METHOD     $request_method;
 fastcgi_param  CONTENT_TYPE       $content_type;
@@ -26,14 +26,14 @@ fastcgi_param  REDIRECT_STATUS    200;
 
 fastcgi_param  AWS_ACCESS_KEY_ID      __AWS_ACCESS_KEY_ID__;
 fastcgi_param  AWS_SECRET_ACCESS_KEY  __AWS_SECRET_ACCESS_KEY__;
-fastcgi_param  AWS_REGION             {{ .Values.s3.awsRegion }};
-fastcgi_param  AWS_HTTPS              {{ .Values.s3.awsHttps }};
-{{ if .Values.s3.serverPort }}
-fastcgi_param  AWS_S3_ENDPOINT        {{ printf "%s:%d" .Values.s3.server (.Values.s3.serverPort | int) | quote }};
+fastcgi_param  AWS_REGION             {{ $s3.region }};
+fastcgi_param  AWS_HTTPS              {{ eq $s3.serverProto "https" }};
+{{ if $s3.serverPort }}
+fastcgi_param  AWS_S3_ENDPOINT        {{ printf "%s:%d" $s3.server ($s3.serverPort | int) | quote }};
 {{ else }}
-fastcgi_param  AWS_S3_ENDPOINT        {{ printf "%s" .Values.s3.server | quote }};
+fastcgi_param  AWS_S3_ENDPOINT        {{ printf "%s" $s3.server | quote }};
 {{ end }}
-fastcgi_param  AWS_VIRTUAL_HOSTING    {{ .Values.s3.awsVirtualHosting }};
-fastcgi_param  AWS_BUCKET_NAME        {{ .Values.s3.bucketName }};
+fastcgi_param  AWS_VIRTUAL_HOSTING    {{ and (ne $s3.style "") (ne $s3.style "path") }};
+fastcgi_param  AWS_BUCKET_NAME        {{ $s3.bucket }};
 fastcgi_param  SSL_CERT_FILE          {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }};
-# fastcgi_param  GDAL_HTTP_UNSAFESSL    {{ .Values.s3.gdalHttpUnsafessl }};
+# fastcgi_param  GDAL_HTTP_UNSAFESSL    {{ $s3.gdalHttpUnsafessl }};
