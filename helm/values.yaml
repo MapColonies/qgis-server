@@ -3,6 +3,9 @@ global:
   tracing: {}
   metrics: {}
   environment: ''
+  storage:
+    s3:
+      secretName: ""
 
 enabled: true
 environment: production
@@ -33,14 +36,18 @@ fs:
     name: dem-pvc-int
 
 s3:
-  accessKeyId: raster
-  secretAccessKey: rasterPassword
-  awsRegion: us-east-1
-  awsHttps: true
-  server: 10.8.0.9
-  serverPort: 9000
-  awsVirtualHosting: false
-  bucketName: dem-dev
+  # Empty values fall back to global.storage.s3.
+  # Secret with keys accessKeyId and secretAccessKey (default s3-<release>-<chart>); must already exist unless createSecret is true.
+  secretName: ""
+  createSecret: false
+  accessKey: ""
+  secretAccessKey: ""
+  server: ""
+  serverPort: ""
+  serverProto: "" # http | https
+  region: ""
+  style: "" # path | hosted
+  bucket: ""
   # gdalHttpUnsafessl: true
 
 sidecar:

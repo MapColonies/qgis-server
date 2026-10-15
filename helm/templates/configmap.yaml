@@ -3,7 +3,7 @@
 {{- $chartName := include "qgis-server.name" . -}}
 {{- $tracingUrl := include "qgis-server.tracingUrl" . -}}
 {{- $metricsUrl := include "qgis-server.metricsUrl" . -}}
-{{- $serverProto := ternary "https" "http" .Values.s3.awsHttps -}}
+{{- $s3 := include "qgis-server.s3" . | fromYaml -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -29,22 +29,22 @@ data:
   {{ end }}
   AWS_PAGER: ""
   AWS_CA_BUNDLE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
-  {{ if .Values.s3.serverPort }}
-  AWS_ENDPOINT_URL: {{ printf "%s://%s:%d" $serverProto .Values.s3.server (.Values.s3.serverPort | int) | quote }}
+  {{ if $s3.serverPort }}
+  AWS_ENDPOINT_URL: {{ printf "%s://%s:%d" $s3.serverProto $s3.server ($s3.serverPort | int) | quote }}
   {{ else }}
-  AWS_ENDPOINT_URL: {{ printf "%s://%s" $serverProto .Values.s3.server | quote }}
+  AWS_ENDPOINT_URL: {{ printf "%s://%s" $s3.serverProto $s3.server | quote }}
   {{ end }}
-  AWS_REGION: {{ quote .Values.s3.awsRegion }}
-  AWS_HTTPS: {{ quote .Values.s3.awsHttps }}
-  {{ if .Values.s3.serverPort }}
-  AWS_S3_ENDPOINT: {{ printf "%s:%d" .Values.s3.server (.Values.s3.serverPort | int) | quote }}
+  AWS_REGION: {{ quote $s3.region }}
+  AWS_HTTPS: {{ eq $s3.serverProto "https" | quote }}
+  {{ if $s3.serverPort }}
+  AWS_S3_ENDPOINT: {{ printf "%s:%d" $s3.server ($s3.serverPort | int) | quote }}
   {{ else }}
-  AWS_S3_ENDPOINT: {{ printf "%s" .Values.s3.server | quote }}
+  AWS_S3_ENDPOINT: {{ printf "%s" $s3.server | quote }}
   {{ end }}
-  AWS_VIRTUAL_HOSTING: {{ quote .Values.s3.awsVirtualHosting }}
-  AWS_BUCKET_NAME: {{ quote .Values.s3.bucketName }}
+  AWS_VIRTUAL_HOSTING: {{ and (ne $s3.style "") (ne $s3.style "path") | quote }}
+  AWS_BUCKET_NAME: {{ quote $s3.bucket }}
   SSL_CERT_FILE: {{ printf "%s/%s" .Values.caPath .Values.caKey | quote }}
-  # GDAL_HTTP_UNSAFESSL: {{ quote .Values.s3.gdalHttpUnsafessl }}
+  # GDAL_HTTP_UNSAFESSL: {{ quote $s3.gdalHttpUnsafessl }}
   QGIS_SERVER_LOG_FILE: {{ quote .Values.env.qgisServerLogFile }}
   QGIS_SERVER_LOG_LEVEL: {{ quote .Values.env.qgisServerLogLevel }}
   RAW_DATA_PROXY_URL: {{ quote .Values.env.rawDataProxyUrl }}
