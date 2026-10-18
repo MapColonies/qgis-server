@@ -1,0 +1,11 @@
+name: pull_request
+
+on: [pull_request]
+
+jobs:
+  helm-lint:
+    uses: MapColonies/shared-workflows/.github/workflows/helm-lint.yaml@v5
+    secrets: inherit
+    with:
+      # ct looks for charts one level below chartDirs, so "helm" (the v5 default) skips this repo's chart.
+      chartDirs: .
