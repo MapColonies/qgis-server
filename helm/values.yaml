@@ -11,7 +11,7 @@ enabled: true
 environment: production
 replicaCount: 1
 initialDelaySeconds: 60
-nodePort: 30030 #for minikube deployment only
+nodePort: 30030  # for minikube deployment only
 resetOnConfigChange: true
 annotations: {}
 
@@ -44,9 +44,9 @@ s3:
   secretAccessKey: ""
   server: ""
   serverPort: ""
-  serverProto: "" # http | https
+  serverProto: ""  # http | https
   region: ""
-  style: "" # path | hosted
+  style: ""  # path | hosted
   bucket: ""
   # gdalHttpUnsafessl: true
 
@@ -102,15 +102,15 @@ route:
   host:
   path:
   timeout:
-    enabled: false # defaults to 30s by openshift
-    duration: 60s # supported units (us, ms, s, m, h, d)
+    enabled: false  # defaults to 30s by openshift
+    duration: 60s  # supported units (us, ms, s, m, h, d)
   tls:
     enabled: true
     useCert: true
 
 ingress:
   enabled: false
-  type: nginx-kubernetes # supported values: 'nginx-org' | 'nginx-kubernetes'
+  type: nginx-kubernetes  # supported values: 'nginx-org' | 'nginx-kubernetes'
   host:
   path: /dem-qgis-server
   cors:
