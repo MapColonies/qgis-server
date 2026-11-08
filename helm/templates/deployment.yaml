@@ -50,6 +50,10 @@ spec:
           image: {{ $cloudProviderDockerRegistryUrl }}{{ .repository }}:{{ $imageTag }}
           {{- end }}
           imagePullPolicy: {{ .Values.cloudProvider.imagePullPolicy }}
+          {{- if .Values.initContainer.resources.enabled }}
+          resources:
+            {{- toYaml .Values.initContainer.resources.value | nindent 12 }}
+          {{- end }}
           command: ["sh", "-c"]
           args:
             - |
