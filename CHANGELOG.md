@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/MapColonies/qgis-server/compare/v4.0.0...v4.0.1) (2026-11-08)
+
+
+### Helm Changes
+
+* configurable init container resources ([#8](https://github.com/MapColonies/qgis-server/issues/8)) ([0a3ac93](https://github.com/MapColonies/qgis-server/commit/0a3ac931e0f2174b16085203637c1f4a902e4cbe))
+
 ## [4.0.0](https://github.com/MapColonies/qgis-server/compare/v3.0.0...v4.0.0) (2026-10-18)
 
 
