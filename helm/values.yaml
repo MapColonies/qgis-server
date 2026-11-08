@@ -63,6 +63,17 @@ sidecar:
         cpu: 100m
         memory: 1Gi
 
+initContainer:
+  resources:
+    enabled: true
+    value:
+      limits:
+        cpu: 200m
+        memory: 64Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+
 image:
   repository: qgis-server
   tag: v1.0.0
