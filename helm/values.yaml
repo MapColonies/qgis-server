@@ -76,7 +76,8 @@ initContainer:
 
 image:
   repository: qgis-server
-  tag: v1.0.0
+  # empty means v<appVersion>
+  tag: ""
 
 env:
   port: 80
