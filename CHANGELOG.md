@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.2](https://github.com/MapColonies/qgis-server/compare/v4.0.1...v4.0.2) (2026-11-24)
+
+
+### Bug Fixes
+
+* default image.tag to empty so the image follows appVersion ([#10](https://github.com/MapColonies/qgis-server/issues/10)) ([ea5a46f](https://github.com/MapColonies/qgis-server/commit/ea5a46f203f813cbec8764b0f5bd9750ba98ce25))
+
 ## [4.0.1](https://github.com/MapColonies/qgis-server/compare/v4.0.0...v4.0.1) (2026-11-08)
 
 
